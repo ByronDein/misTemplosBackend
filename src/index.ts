@@ -20,10 +20,8 @@ app.use('/api', routes);
 // For Vercel, we export the app. For local dev, we listen.
 if (process.env.VERCEL !== '1') {
   const startServer = async () => {
-    await connectDB();
-    // Sync models with database (create tables if not exist)
-    // Note: In production, it's better to use migrations instead of sync
     try {
+        await connectDB();
         await sequelize.sync({ alter: true });
         console.log('Database synced');
     } catch (e) {
@@ -37,8 +35,9 @@ if (process.env.VERCEL !== '1') {
 
   startServer();
 } else {
-    // In Vercel, just connect to DB
-    connectDB();
+    // In Vercel, we don't await the connection at top level to avoid timeouts on cold start
+    // But we ensure it's connected before handling requests
+    connectDB().catch(err => console.error("Vercel DB Connection Error:", err));
 }
 
 export default app;

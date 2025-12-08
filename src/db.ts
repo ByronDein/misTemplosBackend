@@ -10,7 +10,20 @@ export const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST || 'localhost',
     dialect: 'mysql',
-    logging: false, // Set to console.log to see SQL queries
+    logging: console.log, // Enable logging to see errors in Vercel logs
+    dialectOptions: {
+        ssl: {
+            require: false,
+            rejectUnauthorized: false
+        },
+        connectTimeout: 60000 // Increase timeout to 60s
+    },
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
   }
 );
 
