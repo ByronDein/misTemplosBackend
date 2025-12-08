@@ -21,6 +21,21 @@ router.get('/devices/:deviceId', async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+router.get('/devices-all', async (req: Request, res: Response) => {
+  try {
+    
+    const devices = await Device.findAll();
+
+    if (devices) {
+      res.json(devices);
+    } else {
+      res.status(404).json({ message: 'Devices not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // POST /api/devices
 // Registers or updates a device
