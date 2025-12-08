@@ -13,6 +13,11 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Simple health check route
+app.get('/', (req, res) => {
+  res.send('¡Hola Mundo! El backend está funcionando correctamente 🚀');
+});
+
 // Routes
 app.use('/api', routes);
 
