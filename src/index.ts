@@ -17,15 +17,28 @@ app.use(express.json());
 app.use('/api', routes);
 
 // Initialize DB and start server
-const startServer = async () => {
-  await connectDB();
-  // Sync models with database (create tables if not exist)
-  await sequelize.sync({ alter: true }); 
-  console.log('Database synced');
+// For Vercel, we export the app. For local dev, we listen.
+if (process.env.VERCEL !== '1') {
+  const startServer = async () => {
+    await connectDB();
+    // Sync models with database (create tables if not exist)
+    // Note: In production, it's better to use migrations instead of sync
+    try {
+        await sequelize.sync({ alter: true });
+        console.log('Database synced');
+    } catch (e) {
+        console.error('Error syncing database:', e);
+    }
 
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-};
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  };
 
-startServer();
+  startServer();
+} else {
+    // In Vercel, just connect to DB
+    connectDB();
+}
+
+export default app;
