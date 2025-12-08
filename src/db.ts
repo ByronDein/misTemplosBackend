@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
+import mysql2 from 'mysql2'; // Import mysql2 explicitly
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ export const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST || 'localhost',
     dialect: 'mysql',
+    dialectModule: mysql2, // Force Sequelize to use the imported mysql2 module
     logging: console.log, // Enable logging to see errors in Vercel logs
     dialectOptions: {
         ssl: {
