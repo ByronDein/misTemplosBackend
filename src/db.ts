@@ -14,10 +14,10 @@ export const sequelize = new Sequelize(
     dialectModule: mysql2, // Force Sequelize to use the imported mysql2 module
     logging: console.log, // Enable logging to see errors in Vercel logs
     dialectOptions: {
-        ssl: {
-            require: false,
-            rejectUnauthorized: false
-        },
+        // ssl: {
+        //     require: false,
+        //     rejectUnauthorized: false
+        // },
         connectTimeout: 60000 // Increase timeout to 60s
     },
     pool: {
